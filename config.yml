@@ -1,0 +1,10 @@
+api:
+  -
+    name : "cryptocompare"
+    url : "https://min-api.cryptocompare.com/data/v2/"
+    apikey : "Apikey 883f455a4bb2f2e7a948de1e91a628c19737518f720d04358935b1445f705d68d9"
+    param :
+        range : "histoday"
+        fsum: "BTC"
+        tsum: "USD"
+        limit: "10"
