@@ -11,13 +11,10 @@ func main() {
 	}
 
 	apis := InitApi()
-
-	for _, api := range apis {
-		go api.Schedule()
-	}
 	m := make(chan int)
-	ScheduleRequest(&m, 0)
-
+	for _, api := range apis {
+		go api.Schedule(&m)
+	}
 	res := <-m
 	fmt.Printf(" chann %d  \n", res)
 }
