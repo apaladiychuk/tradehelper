@@ -18,6 +18,9 @@ type CryptoCompare struct {
 func (c *CryptoCompare) Schedule(m *chan int) {
 	fmt.Println("start timer ")
 	timer := time.NewTimer(SCHEDULER_TIME)
+
+	// todo  select  previous data from database and request more data from server if needed
+
 	go func(timer *time.Timer) {
 		fmt.Println("wait  timer ")
 		tmr := <-timer.C
@@ -53,6 +56,12 @@ func (c *CryptoCompare) requestCrypto() {
 				fmt.Println(" Json unmarshal error ", err.Error())
 			} else {
 				fmt.Printf(" Json resp %v \n ", data)
+				// todo move database saving to gorutine
+				for _, a := range data.Data.Data {
+					if err := c.SaveAssets(a); err != nil {
+						fmt.Println("Save Error >>  ", err.Error())
+					}
+				}
 			}
 			//fmt.Println(" [OK]  --- ",string(body ))
 		}

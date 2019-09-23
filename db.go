@@ -20,10 +20,10 @@ func Connect() (*pg.DB, error) {
 	if Conn == nil {
 		var user, pwd, database, addr string
 
-		database = "pg_database"
-		addr = "db_host"
-		user = "pg_user"
-		pwd = "pg_password"
+		database = "postgres"
+		addr = "localhost:5432"
+		user = "postgres"
+		pwd = "postgres"
 
 		db := pg.Connect(&pg.Options{
 			Addr:        addr,
@@ -54,8 +54,24 @@ func Connect() (*pg.DB, error) {
 	return Conn, nil
 }
 
-func (c *CryptoCompare) SaveAssets(Assets) error {
+func (c *CryptoCompare) SaveAssets(a Assets) error {
+	a.Time = a.Time * 100
 
+	conn, err := Connect()
+	if err != nil {
+		return err
+	}
+	var ea Assets
+	if err := conn.Model(&ea).Where("time = ? ", a.Time).Select(); err == nil {
+		// skip existing row
+		// todo we can update existing row
+		fmt.Printf(" skip value for %d \n", a.Time)
+		return nil
+	}
+	if _, err := conn.Model(&a).
+		Returning("Id", &a.Id).Insert(); err != nil {
+		return err
+	}
 	return nil
 }
 func (c *CryptoCompare) SaveError(string) error {

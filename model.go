@@ -29,13 +29,15 @@ type AssetsBundle struct {
 }
 
 type Assets struct {
-	Time             int     `json:"time"`
-	High             float64 `json:"high"`
-	Low              float64 `json:"low"`
-	Open             float64 `json:"open"`
-	Volumefrom       float64 `json:"volumefrom"`
-	Volumeto         float64 `json:"volumeto"`
-	Close            float64 `json:"close"`
-	ConversionType   string  `json:"conversionType"`
-	ConversionSymbol string  `json:"conversionSymbol"`
+	TableName        struct{} `sql:"assets,alias:assets" json:"-"`
+	Id               int      `sql:",pk" json:"id"`
+	Time             int64    `json:"time"`
+	High             float64  `json:"high"`
+	Low              float64  `json:"low"`
+	Open             float64  `json:"open"`
+	Volumefrom       float64  `json:"volumefrom"`
+	Volumeto         float64  `json:"volumeto"`
+	Close            float64  `json:"close"`
+	ConversionType   string   `sql:"conversiontype" json:"conversionType"`
+	ConversionSymbol string   `sql:"conversionsymbol" json:"conversionSymbol"`
 }
